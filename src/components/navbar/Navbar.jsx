@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import logo from '../../final-logo-01.jpg';
 import './navbar.css';
+import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {
+  const navigate=useNavigate();
   const [toggleMenu, setToggleMenu] = useState(false);
   const size = {
     height: 200,
@@ -26,7 +28,7 @@ const Navbar = () => {
       </div>
       <div className="gpt3__navbar-sign">
         
-        <button type="button">Sign in/Sign up</button>
+        <button onClick={() =>navigate("/register")} >Sign in/Sign up</button>
       </div>
       <div className="gpt3__navbar-menu">
         {toggleMenu
@@ -50,6 +52,6 @@ const Navbar = () => {
       </div>
     </div>
   );
-};
+        }
 
 export default Navbar;

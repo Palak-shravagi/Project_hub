@@ -1,23 +1,21 @@
 import React from 'react';
-
-import { Footer, Blog, Possibility, Features, WhatGPT3, Header } from './containers';
-import { CTA, Brand, Navbar } from './components';
-
 import './App.css';
+import { HashRouter , Routes ,Route } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
+import Register  from "./components/Register/register";
+import Login  from "./components/Login/login";
+import Info from "./components/Information/infromation";
 
-const App = () => (
-  <div className="App">
-    <div className="gradient__bg">
-      <Navbar />
-      <Header />
-    </div>
-    
-    <WhatGPT3 />
-    <Features />
-    
-    <CTA />
-    <Footer />
-  </div>
-);
+function App() {
+  return (
+    <HashRouter>
+      <Routes >
+        <Route path="/" exact element={<LandingPage/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/login" element={<Login/>} />
+      </Routes >
+    </HashRouter>
+  );
+}
 
 export default App;
