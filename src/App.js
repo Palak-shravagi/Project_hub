@@ -13,6 +13,8 @@ function App() {
         <Route path="/" exact element={<LandingPage/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
+
+
       </Routes >
     </HashRouter>
   );

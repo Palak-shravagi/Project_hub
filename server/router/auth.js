@@ -9,26 +9,68 @@ router.get('/', (req, res) => {
     res.send(`hello world from router js`);
 });
 
-router.post('/register', (req, res) => {
-    const { name, username, email, phone, college, password, cpassword } = req.body;
+// router.post('/register', (req, res) => {
+//     console.log(req.body);
+//     console.log("hii")
+//     const { name, username, email, phone, college, password, cpassword } = req.body;
+
+//     if (!name || !username || !email || !phone || !college || !password || !cpassword) {
+//         return res.json({ error: "plz fill the details properly :" })
+//     }
+
+//     User.findOne({ email: email })
+//         .then((userExist) => {
+//             if (userExist) {
+//                 return res.status(422).json({ error: "email already exist" });
+//             }
+//             const user = new User({ name, username, email, phone, college, password, cpassword })
+
+//             user.save().then(() => {
+
+//             }).catch((err) => res.status(500).json({ error: "failed to registred..." }));
+
+//         }).catch(err => { console.log(err) });
+// });
+
+router.post('/register', async(req, res) => {
+    console.log(req.body);
+    console.log("hii")
+
+    const name = req.body.name;
+    const username = req.body.username;
+    const email = req.body.email;
+    const phone = req.body.phone;
+    const college = req.body.college;
+    const password = req.body.password;
+    const cpassword = req.body.cpassword;
 
     if (!name || !username || !email || !phone || !college || !password || !cpassword) {
-        return res.json({ error: "plf fill the details properly :" })
+        console.log("Wrong ");
+        return res.json({ error: "plz fill the details properly :" })
     }
+    console.log(username);
+    try {
+        const user = await User.findOne({ email: email });
+        if (user) {
+            console.log("user found\n");
+            return res.status(422).json({ error: "email already exist" });
+        } else {
+            console.log("NOT FOUND");
+        }
 
-    User.findOne({ email: email })
-        .then((userExist) => {
-            if (userExist) {
-                return res.status(422).json({ error: "email already exist" });
-            }
-            const user = new User({ name, username, email, phone, college, password, cpassword })
-
-            user.save().then(() => {
-                res.status(201).json({ message: "user registred" });
-            }).catch((err) => res.status(500).json({ error: "failed to registred..." }));
-
-        }).catch(err => { console.log(err) });
+        const userD = new User({ name: name, username: username, email: email, phone: phone, college: college, password: password, cpassword: cpassword });
+        const success = await userD.save();
+        if (success) {
+            console.log("Successssss");
+            return res.status(201).json({ message: "user registred" });
+        } else {
+            return res.status(422).json({ message: "Error occured" });
+        }
+    } catch (err) {
+        console.log(err);
+    }
 });
+
 
 
 //login route
