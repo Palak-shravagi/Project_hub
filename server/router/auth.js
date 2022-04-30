@@ -32,6 +32,58 @@ router.get('/', (req, res) => {
 //         }).catch(err => { console.log(err) });
 // });
 
+
+router.post('/addinformation', async(req, res) => {
+    console.log(req.body);
+  //  console.log("hii")
+
+    const title = req.body.title;
+    const department = req.body.department;
+    const domain = req.body.domain;
+    const lang = req.body.lang;
+    const academicYear = req.body.academicYear;
+    const files = req.body.files;
+    const guideName = req.body.guideName;
+
+    if (!title ||
+        !department ||
+        !domain ||
+        !lang ||
+        !academicYear ||
+        !files ||
+        !guideName ) {
+        console.log("Wrong ");
+        return res.json({ error: "plz fill the details properly :" })
+    }
+    console.log(username);
+    try {
+        const fileD = new File({
+            title:title,
+            department:department,
+            domain:domain,
+            lang:lang,
+            academicYear:academicYear,
+            files:files,
+            guideName :guideName
+         });
+        
+        const success = await fileD.save();
+        
+        if (success) {
+            console.log("data uploaded");
+            return res.status(201).json({ message: "data uploaded successfully" });
+        } else {
+            return res.status(422).json({ message: "Error occured" });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+
+
+
+
 router.post('/register', async(req, res) => {
     console.log(req.body);
     console.log("hii")

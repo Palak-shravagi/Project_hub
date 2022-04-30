@@ -2,8 +2,11 @@ import React from 'react';
 import people from '../../assets/people.png';
 import ai from '../../assets/illustration-intro.png';
 import './header.css';
+import { useNavigate } from "react-router-dom";
 
+// const navigate = useNavigate();
 const Header = () => (
+  
   <div className="gpt3__header section__padding" id="home">
     <div className="gpt3__header-content">
       <h1 className="gradient__text">Where Developers stores their projects</h1>
@@ -11,7 +14,8 @@ const Header = () => (
 
       <div className="gpt3__header-content__input">
         <input type="email" placeholder="Your Email Address" />
-        <button type="button">Get Started</button>
+        <button  type="button">Get Started</button>
+        
       </div>
 
       

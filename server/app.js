@@ -3,11 +3,16 @@ const app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
-require('./db/conn');
 app.use(express.json());
 constUser = require('./models/userSchema');
-
+const info = require('./models/fileSchema');
+const cors = require("cors");
+app.use(express.json());
 app.use(require('./router/auth'));
+const multer = require("multer");
+const upload = multer({
+  dest: "./uploads/",
+});
 
 //middleware
 const middleware = (req, res, next) => {
@@ -42,6 +47,25 @@ app.get('/login', (req, res) => {
 
 // app.get('/register', (req, res) => {
 //     res.send(`hello world register`);
+// });
+
+
+// app.post("/addinformation", async (req, res) => {
+//     try {
+//       const newfileSchema = new info(req.body);
+//       const success = await newfileSchema.save();
+//       if (success) {
+//         return res.Status(201).json({ message: "Added Successfully" });
+//       } else {
+//        return  res.status(266).json({ err: "Error adding data" });
+//       }
+//     } catch (err) {
+//       res.status.json({ err: "Error adding data", code: err.code });
+//     }
+//   });
+
+// app.post("/upload",async (req,res)=>{
+
 // });
 
 app.listen(PORT, () => {

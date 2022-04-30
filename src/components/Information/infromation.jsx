@@ -5,14 +5,89 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './info.css';
 import { CTA, Brand, Navbar } from '..';
 import { Footer, Blog, Possibility, Features, WhatGPT3, Header } from '../../containers';
-
-
+import axios from "axios";
 import { useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { useNavigate } from "react-router-dom";
 
 function MyForm() {
-  const [name, setName] = useState("");
-  const [domain, setDomain] = useState("");
+  const navigate = useNavigate();
+  const [Title, setTitle] = React.useState("project");
+  const [Dept, setDept] = React.useState("dept");
+  const [Domain, setDomain] = React.useState("Web");
+  const [Language, setLanguage] = React.useState("lang");
+  const [File, setFile] = React.useState(null);
+  const [Year, setYear] = React.useState(null);
+  const [Guide, setGuide] = React.useState("guide");
+  
+  // const [name, setName] = useState("");
+//   const [user, setUser] = useState({
+//     title: "",
+//     department: "",
+//     domain: "",
+//     lang: "",
+//     academicYear: null,
+//     files: null,
+//     guideName: "",
+    
+//   });
+//   console.log(user);
+//   let name, value;
+//   const handleInputs = (e) => {
+//     // console.log(e);
+//     name = e.target.name;
+//     value = e.target.value;
+
+  
+//     setUser({ ...user, [name]: value });
+    
+//   };
+  const postData = async (e) => {
+    e.preventDefault();
+
+
+// console.log("this is postdata mthod");
+
+//     const user  = {
+//     title:Title,
+//     department:Dept,
+//     domain:Domain,
+//     lang:Language,
+//     academicYear:Year,
+//     files:File,
+//     guideName:Guide 
+//    } ;
+
+//     console.log(user);
+    
+
+//     const res = await fetch("/addinformation", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         title,
+//         department,
+//         domain,
+//         lang,
+//         academicYear,
+//         files,
+//         guideName  
+//       }),
+//     });
+
+    // const data = await res.json();
+    // console.log("data:" + JSON.stringify(data));
+    // if (data.status === 422 || !data) {
+    //   window.alert("invalid data");
+    // } else {
+    //   window.alert("uploaded");
+
+    //   navigate("/login");
+    // }
+  };
+  
   let minOffset = 0, maxOffset = 75;
     let thisYear = (new Date()).getFullYear();
     let allYears = [];
@@ -23,6 +98,22 @@ function MyForm() {
     const yearList = allYears.map((x) => {return(<option style={{ color: "#000000" }} key={x}>{x}</option>)});
   // const handleChange = (event) => {
   //   setMyCar(event.target.value)
+
+  // const res = await fetch("/register", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     name,
+  //     username,
+  //     email,
+  //     phone,
+  //     college,
+  //     password,
+  //     cpassword,
+  //   }),
+  // });
 
   return (
 
@@ -52,19 +143,19 @@ function MyForm() {
         <div className="shape" />
         <div className="shape" />
       </div >
-      <div className="gradient__bg" style={{ "margin": "100px", color: "#ffffff" }} >
-        <form className="gradient__bg" style={{ "padding-top": "400px" }}>
+      <div className="gradient__bg" style={{ "margin": "150px", color: "#ffffff" }} >
+        <form  className="gradient__bg" style={{ "padding-top": "500px" }} method="POST">
           <h3>Upload Mini-project Information</h3>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
 
             <Form.Label color="#fff">Title</Form.Label>
-            <Form.Control as="textarea" rows={1} />
+            <Form.Control onChange={(e) => setTitle(e.target.value)} as="textarea" rows={1} />
           </Form.Group>
 
 
           <Row style={{marginRight:"15px"}}>
             <Form.Label>Department</Form.Label>
-            <Form.Select as={Col} aria-label="Default select example" style={{ "margin": "15px", color: "#000000" }}>
+            <Form.Select onChange={(e) => setDept(e.target.value)} as={Col} aria-label="Default select example" style={{ "margin": "15px", color: "#000000" }} required>
               <option style={{ color: "#000000" }}>Select</option>
               <option value="1" style={{ color: "#000000" }} >CSE</option>
               <option value="2" style={{ color: "#000000" }}>IT</option>
@@ -78,7 +169,7 @@ function MyForm() {
 
           <Row style={{marginRight:"15px"}}>
             <Form.Label>Domain</Form.Label>
-            <Form.Select as={Col} aria-label="Default select example" style={{ "margin": "15px", color: "#000000" }}>
+            <Form.Select onChange={(e) => setDomain(e.target.value)} as={Col} aria-label="Default select example" style={{ "margin": "15px", color: "#000000" }} required>
               <option style={{ color: "#000000" }}>Select</option>
               <option value="1" style={{ color: "#000000" }} >Web</option>
               <option value="2" style={{ color: "#000000" }}>Android</option>
@@ -87,7 +178,7 @@ function MyForm() {
           </Row>
           <Row style={{marginRight:"15px"}}>
             <Form.Label color="#fff">Languages Used</Form.Label>
-            <Form.Select as={Col} aria-label="Default select example" style={{ margin: "15px" }}>
+            <Form.Select onChange={(e) => setLanguage(e.target.value)} as={Col} aria-label="Default select example" style={{ margin: "15px" }} required>
 
               <option style={{ color: "#000000" }}>Select</option>
               <option value="1" style={{ color: "#000000" }}>C</option>
@@ -97,7 +188,7 @@ function MyForm() {
             </Row>
            <Row style={{marginRight:"15px"}}>
             <Form.Label style={{ color: "#ffffff" }}>Academic-year</Form.Label>
-            <Form.Select aria-label="Default select example" style={{ "margin": "15px",color: "#000000" }} >
+            <Form.Select onChange={(e) => setYear(e.target.value)} aria-label="Default select example" style={{ "margin": "15px",color: "#000000" }} required >
                      {yearList}
               {/* <option style={{ color: "#000000" }}>Select</option>
 
@@ -109,19 +200,19 @@ function MyForm() {
             </Row>
             <Form.Group controlId="formFileMultiple" className="mb-3" >
               <Form.Label>Upload your files related to project</Form.Label>
-              <Form.Control type="file" multiple />
+              <Form.Control  onChange={(e) => setFile(e.target.files[0])}  required type="file" multiple />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
+            {/* <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
               <Form.Label>Colaborators</Form.Label>
               <Form.Control as="textarea" rows={1} />
-            </Form.Group>
+            </Form.Group> */}
           
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
             <Form.Label>Guide Name</Form.Label>
-            <Form.Control as="textarea" rows={1} />
+            <Form.Control onChange={(e) => setGuide(e.target.value)} as="textarea" required rows={1} />
           </Form.Group>
-          <button>Upload</button>
+          <button type = "submit" onClick={postData}>Upload</button>
         </form>
 
       </div>

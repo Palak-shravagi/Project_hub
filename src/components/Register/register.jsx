@@ -84,9 +84,11 @@ console.log("this is postdata mthod");
         />
         <div >
           </div>
+
         <form className="gradient__bg" method="POST">
           <h3>Register</h3>
-          {/* <label htmlFor="username">Name</label> */}
+          {/* <label htmlFor="username">Name</label> */}\
+          
           <input
             type="text"
             value={user.name}
@@ -98,6 +100,7 @@ console.log("this is postdata mthod");
             id="name"
             required="required"
           />
+          
           {/* <label htmlFor="username">Username</label> */}
           <input
             type="text"
@@ -108,7 +111,7 @@ console.log("this is postdata mthod");
             
             placeholder="username"
             id="username"
-            required
+            required="required"
           />
           {/* <label htmlFor="username">Email</label> */}
           <input
@@ -120,7 +123,7 @@ console.log("this is postdata mthod");
             name="email"
             placeholder="email"
             id="email"
-            required
+            required="required"
           />
           {/* <label htmlFor="username">Phone-Number</label> */}
           <input
