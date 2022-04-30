@@ -5,6 +5,7 @@ import LandingPage from "./components/LandingPage";
 import Register  from "./components/Register/register";
 import Login  from "./components/Login/login";
 import Info from "./components/Information/infromation";
+import homepage from "./components/HomePage/homepage";
 
 function App() {
   return (
@@ -13,8 +14,10 @@ function App() {
         <Route path="/" exact element={<LandingPage/>} />
         <Route path="/register" element={<Register/>} />
         <Route path="/login" element={<Login/>} />
+        {/* <Route path="/homepage" element={<Homepage/>}/> */}
+        <Route path="/infromation" element={<information/>} />
 
-
+<Route path="/" element={<Info/>} />
       </Routes >
     </HashRouter>
   );

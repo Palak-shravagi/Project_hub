@@ -1,9 +1,33 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const router = express.Router();
 require('../db/conn');
 const User = require('../models/userSchema');
 const bcrypt = require('bcryptjs');
+
+
+// File Uploads
+
+
+const Upload = require("../upload");
+const path = require("path");
+
+//AWS CONFIGURATIONS
+
+const { uploadFile } = require("../s3");
+const {getFileStream} =require("../s3");
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
+
+var AWS = require('aws-sdk');
+
+
+router.use(cookieParser());
+router.use(express.static(__dirname + "public/"));
+
 
 router.get('/', (req, res) => {
     res.send(`hello world from router js`);
@@ -113,6 +137,39 @@ router.post('/login', async(req, res) => {
     }
 
 })
+
+
+router.post("/resumeUpload", Upload.single("pdf"),  async (req, res, next) => {
+    try{
+      console.log(req.file);
+      const stuId = "req.userID";
+      const result = await uploadFile(req.file,stuId);
+      console.log("S3 response", result);
+    
+      fs.unlink(path.join(req.file.path), (err) => {
+        if (err) throw err;
+        console.log("file deleted from server");
+      });
+    
+      const filter={
+        _id : stuId,
+      };
+      stuId= stuId+path.extname(file.originalname);
+      const update={
+        resume: stuId,
+      };
+      const user = await Student.findOneAndUpdate(filter,update);
+  
+      res.send({
+        status: "success",
+        message: "File uploaded successfully",
+        data: req.file,
+      });
+    }
+    catch(err){
+      console.log(err);
+    }
+  });
 
 
 module.exports = router;
