@@ -27,7 +27,7 @@ function Login() {
     } else {
       window.alert("login successfull");
 
-      navigate("/infromation");
+      navigate("/LoginHome");
     }
   };
 
