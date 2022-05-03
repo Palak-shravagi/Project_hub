@@ -10,7 +10,7 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Redirect } from "react-router-dom";
 import MenuItem from "@mui/material/MenuItem";
 import Rightsection from "../rightsection/Rightsection";
 import TextField from "@mui/material/TextField";
@@ -27,7 +27,26 @@ const pages = ["Home", "About us", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function LoginHome() {
-  const navigate = useNavigate();
+  const [logedIN, setlogedIN] = React.useState(true);
+  React.useEffect(async () => {
+    try {
+      const res = await fetch("/islogedin", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.status != 266) setlogedIN(false);
+    } catch (error) {
+      console.log(error);
+      window.alert("Error!");
+    }
+  }, []);
+
+  if (!logedIN) {
+    return <Redirect to="/login" />;
+  }
+  const navigate = useNavigate ();;
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);

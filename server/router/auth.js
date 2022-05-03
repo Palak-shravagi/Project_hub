@@ -78,25 +78,28 @@ router.post('/register', async(req, res) => {
 
 
 //login route
-
+router.get('/islogedin', authenticate, async(req, res) => {
+    res.status(266).json({ message: "User Loged In" });
+});
 router.post('/login', async(req, res) => {
     console.log(req.body);
     console.log("inside login route....");
     let token;
     try {
-        const { email, password } = req.body;
-        console.log("inside login route if block");
-        if (!email || !password) {
+        // const { username, password } = req.body;
+        console.log("inside block");
+        if (!req.body.username || !req.body.password) {
             console.log("inside login route if block");
             return res.status(400).json({ error: "please fill the required data.." });
 
         }
 
-        const userLogin = await User.findOne({ email: email });
+        // const userLogin = await User.findOne({ username: email });
+        const userLogin = await User.findOne({ username: req.body.username });
 
         if (userLogin) {
-            const isMatch = await bcrypt.compare(password, userLogin.password);
-
+            const isMatch = await bcrypt.compare(req.body.password, userLogin.password);
+            console.log(isMatch);
             token = await userLogin.generateAuthToken();
             console.log(token);
             res.cookie("jwtoken", token, {
@@ -112,7 +115,7 @@ router.post('/login', async(req, res) => {
             }
         } else {
             res.status(400).json({ error: "invalid credential" });
-            console.log("invalid credentials");
+            console.log("invalid credentials      ...................    user not found");
         }
 
     } catch (err) {

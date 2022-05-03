@@ -1,46 +1,47 @@
 import { WindowSharp } from "@mui/icons-material";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Redirect } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const userLogin = async (e) => {
     e.preventDefault();
 
     console.log("button clicked..");
-    // const { email, password } = user;
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    console.log("username:" + username);
+    console.log("password :" + password);
     // console.log("res" + JSON.stringify(res));
-    if (email === "" || password === "") {
-      Window.alert("please fill all the required data");
-    } else {
-      const data = await res.json();
-      console.log("data:" + data);
-      if (data.status === 400 || !data) {
+    if (username !== "" && password !== "") {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+      console.log(res);
+      if (res.status === 400 || !res) {
         window.alert("invalid credentials");
       } else {
         window.alert("login successfull");
 
         navigate("/LoginHome");
       }
+    } else {
+      // const { email, password } = user;
+      window.alert("please fill the required data ");
     }
   };
 
   return (
     <div>
-      <div style={{ "padding-top": "400px" }}>
+      <div style={{ paddingTop: "400px" }}>
         {/* Design by foolishdeveloper.com */}
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
@@ -67,8 +68,8 @@ function Login() {
           {/* <label htmlFor="username">Username</label> */}
           <input
             type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="username"
             id="username"
           />

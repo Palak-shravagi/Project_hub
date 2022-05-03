@@ -28,10 +28,6 @@ mongoose.connect(DB).then(() => {
 }).catch((err) => console.log(err));
 
 
-app.get('/', (req, res) => {
-    res.send(`hello world`);
-});
-
 // app.get('/about', middleware, (req, res) => {
 //     console.log(`hello middleware from about`);
 //     res.send(`hello world from about`);
