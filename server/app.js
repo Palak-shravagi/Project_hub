@@ -11,14 +11,14 @@ app.use(express.json());
 app.use(require('./router/auth'));
 const multer = require("multer");
 const upload = multer({
-  dest: "./uploads/",
+    dest: "./uploads/",
 });
 
 //middleware
-const middleware = (req, res, next) => {
-    console.log("hello middleware");
-    next();
-};
+// const middleware = (req, res, next) => {
+//     console.log("hello middleware");
+//     next();
+// };
 
 const DB = process.env.DATABASE;
 const PORT = process.env.PORT;
@@ -32,18 +32,18 @@ app.get('/', (req, res) => {
     res.send(`hello world`);
 });
 
-app.get('/about', middleware, (req, res) => {
-    console.log(`hello middleware from about`);
-    res.send(`hello world from about`);
-});
+// app.get('/about', middleware, (req, res) => {
+//     console.log(`hello middleware from about`);
+//     res.send(`hello world from about`);
+// });
 
-app.get('/contact', (req, res) => {
-    res.send(`hello world from contact`);
-});
+// app.get('/contact', (req, res) => {
+//     res.send(`hello world from contact`);
+// });
 
-app.get('/login', (req, res) => {
-    res.send(`hello world from login`);
-});
+// app.get('/login', (req, res) => {
+//     res.send(`hello world from login`);
+// });
 
 // app.get('/register', (req, res) => {
 //     res.send(`hello world register`);

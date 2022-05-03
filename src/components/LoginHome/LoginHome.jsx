@@ -21,6 +21,7 @@ import logo from "../../final-logo-01.jpg";
 import { Row, Col } from "react-bootstrap";
 import "./loginhome.css";
 import Filter from "../filters/filter";
+import { useEffect } from "react";
 
 const pages = ["Home", "About us", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -45,6 +46,34 @@ function LoginHome() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const callhomelogin = async () => {
+    try {
+      const res = fetch("/LoginHome", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      console.log("data from db" + data);
+      if (!res.status === 200) {
+        const error = new Error(res.error);
+        throw error;
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/login");
+    }
+    navigate("/LoginHome");
+  };
+
+  useEffect(() => {
+    callhomelogin();
+  }, []);
 
   return (
     <>
@@ -207,7 +236,7 @@ function LoginHome() {
             <div class="input-group mb-3">
               <input
                 type="text"
-                style={{ backgroundColor: "rgb(13,17,23)" }}
+                style={{ backgroundColor: "rgb(13,17,23)", color: "white" }}
                 class="form-control input-text"
                 placeholder="Type here to search"
                 aria-label="Recipient's username"

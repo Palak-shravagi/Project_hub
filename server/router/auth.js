@@ -6,23 +6,21 @@ const router = express.Router();
 require('../db/conn');
 const User = require('../models/userSchema');
 const bcrypt = require('bcryptjs');
+const authenticate = require("../middleware/authenticate");
 
 
 // File Uploads
-
-
 const Upload = require("../upload");
 const path = require("path");
 
 //AWS CONFIGURATIONS
 
-const { uploadFile } = require("../s3");
-const {getFileStream} =require("../s3");
-const fs = require("fs");
-const util = require("util");
-const unlinkFile = util.promisify(fs.unlink);
-
-var AWS = require('aws-sdk');
+// const { uploadFile } = require("../s3");
+// const { getFileStream } = require("../s3");
+// const fs = require("fs");
+// const util = require("util");
+// const unlinkFile = util.promisify(fs.unlink);
+// var AWS = require('aws-sdk');
 
 
 router.use(cookieParser());
@@ -30,35 +28,17 @@ router.use(express.static(__dirname + "public/"));
 
 
 router.get('/', (req, res) => {
-    res.send(`hello world from router js`);
+    res.send(`hello world `);
 });
 
-// router.post('/register', (req, res) => {
-//     console.log(req.body);
-//     console.log("hii")
-//     const { name, username, email, phone, college, password, cpassword } = req.body;
 
-//     if (!name || !username || !email || !phone || !college || !password || !cpassword) {
-//         return res.json({ error: "plz fill the details properly :" })
-//     }
-
-//     User.findOne({ email: email })
-//         .then((userExist) => {
-//             if (userExist) {
-//                 return res.status(422).json({ error: "email already exist" });
-//             }
-//             const user = new User({ name, username, email, phone, college, password, cpassword })
-
-//             user.save().then(() => {
-
-//             }).catch((err) => res.status(500).json({ error: "failed to registred..." }));
-
-//         }).catch(err => { console.log(err) });
-// });
+router.get('/LoginHome', authenticate, (req, res) => {
+    console.log("login succesfully .... this is home page ");
+    res.send(req.rootUser);
+});
 
 router.post('/register', async(req, res) => {
     console.log(req.body);
-    console.log("hii")
 
     const name = req.body.name;
     const username = req.body.username;
@@ -101,12 +81,15 @@ router.post('/register', async(req, res) => {
 
 router.post('/login', async(req, res) => {
     console.log(req.body);
+    console.log("inside login route....");
     let token;
     try {
         const { email, password } = req.body;
-
+        console.log("inside login route if block");
         if (!email || !password) {
+            console.log("inside login route if block");
             return res.status(400).json({ error: "please fill the required data.." });
+
         }
 
         const userLogin = await User.findOne({ email: email });
@@ -120,56 +103,55 @@ router.post('/login', async(req, res) => {
                 expires: new Date(Date.now() + 275489859),
                 httpOnly: true
             });
-
-
             if (!isMatch) {
                 res.status(400).json({ error: "user error" });
+                console.log("user error");
             } else {
+                console.log("user login successfully");
                 res.json({ message: "user signin successfully.." });
             }
         } else {
             res.status(400).json({ error: "invalid credential" });
+            console.log("invalid credentials");
         }
 
-
     } catch (err) {
-
+        console.log(err);
     }
 
 })
 
 
-router.post("/resumeUpload", Upload.single("pdf"),  async (req, res, next) => {
-    try{
-      console.log(req.file);
-      const stuId = "req.userID";
-      const result = await uploadFile(req.file,stuId);
-      console.log("S3 response", result);
-    
-      fs.unlink(path.join(req.file.path), (err) => {
-        if (err) throw err;
-        console.log("file deleted from server");
-      });
-    
-      const filter={
-        _id : stuId,
-      };
-      stuId= stuId+path.extname(file.originalname);
-      const update={
-        resume: stuId,
-      };
-      const user = await Student.findOneAndUpdate(filter,update);
-  
-      res.send({
-        status: "success",
-        message: "File uploaded successfully",
-        data: req.file,
-      });
-    }
-    catch(err){
-      console.log(err);
-    }
-  });
+// router.post("/resumeUpload", Upload.single("pdf"), async(req, res, next) => {
+//     try {
+//         console.log(req.file);
+//         const stuId = "req.userID";
+//         const result = await uploadFile(req.file, stuId);
+//         console.log("S3 response", result);
+
+//         fs.unlink(path.join(req.file.path), (err) => {
+//             if (err) throw err;
+//             console.log("file deleted from server");
+//         });
+
+//         const filter = {
+//             _id: stuId,
+//         };
+//         stuId = stuId + path.extname(file.originalname);
+//         const update = {
+//             resume: stuId,
+//         };
+//         const user = await Student.findOneAndUpdate(filter, update);
+
+//         res.send({
+//             status: "success",
+//             message: "File uploaded successfully",
+//             data: req.file,
+//         });
+//     } catch (err) {
+//         console.log(err);
+//     }
+// });
 
 
 module.exports = router;
